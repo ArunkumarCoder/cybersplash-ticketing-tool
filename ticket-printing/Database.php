@@ -7,29 +7,18 @@ class Database
 	private $dbName = "ticketing_app";
 	private $dbUser = "root";
 	private $dbPassword = "";
-	// private $dbConn = "";
+	private $dbConn;
 
-	// public function __construct($dbConn)
-	// {
-	// 	$this->dbConn = $dbConn;
-	// }
-
-	public function connection()
+	public function __construct()
 	{
 		try {
-			$dbConn = new \PDO("mysql:host=$this->dbHost;dbname=$this->dbName", $this->dbUser, $this->dbPassword);
-			return $dbConn;
+			$this->dbConn = new \PDO("mysql:host=$this->dbHost;dbname=$this->dbName", $this->dbUser, $this->dbPassword);
 		} catch(Exception $e) {
 			echo "Connection failed" . $e->getMessage();  
 		}
 	}
 
-	public function runQuery($query, $params = null)
-	// public function runQuery()
-	{
-        // $stmt = $this->connection->query($query);
-        $stmt = $this->connection()->query($query);
-        // $stmt->execute($params);
-    	return $stmt;
+	public function getDB(){
+        return $this->dbConn;
     }
 }
