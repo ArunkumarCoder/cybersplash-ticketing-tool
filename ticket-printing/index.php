@@ -1,3 +1,29 @@
+<?php
+/**
+ * Autoloading 
+ */
+spl_autoload_register(function ($class) {
+	$class_name_parts = explode('\\', $class);
+	$class_name = $class_name_parts[1];
+	$classs_file = $class_name . '.php';
+	if (file_exists($classs_file)) {
+		include $classs_file;
+	}
+});
+// $dbConn="";
+// require_once('Database.php');
+
+// print_r(PDO::getAvailableDrivers());
+// $t = new Ticket\Ticketing();
+$p=new Db\Database();
+// $h= $p->connection("localhost", "ticketing_app", "root", "");
+// $t->username = 'user';
+// $t->password = 'password';
+
+print_r($p->connection());
+// print_r($p->runQuery());
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -11,17 +37,8 @@
 
 <body>
 	<?php
-	$data = array(
-		array("id" => 1, "place_name" => "Kollam", "km" => 13),
-		array("id" => 2, "place_name" => "Kottiyam", "km" => 10),
-		array("id" => 3, "place_name" => "Chathanoor", "km" => 7),
-		array("id" => 4, "place_name" => "Paravur", "km" => 0),
-	);
-
-	$bus_number = "KL 02 B 2255";
-	$trip = "Kollam -> Paravur";
-	$minimum_amount = 42;
-	$total_km = 0;
+		$g=$p->runQuery("SELECT * FROM details");
+		print_r($g->fetch(PDO::FETCH_ASSOC));
 	?>
 
 	<nav class="navbar navbar-light bg-light">
@@ -93,9 +110,9 @@
 		if (isset($_REQUEST['print-btn'])) {
 			$errors = array();
 
-			$destination_from = (isset($_POST['destination_from']) && $_POST['destination_from'] != "") ? $_POST['destination_from'] : "";
-			$destination_to = (isset($_POST['destination_to']) && $_POST['destination_to'] != "") ? $_POST['destination_to'] : "";
-			$people_count = (isset($_POST['people_count']) && $_POST['people_count'] != "") ? $_POST['people_count'] : "";
+			$destination_from = (isset($_POST['destination_from']) && $_POST['destination_from'] != "") ? htmlspecialchars($_POST['destination_from'], ENT_QUOTES, 'UTF-8') : "";
+			$destination_to = (isset($_POST['destination_to']) && $_POST['destination_to'] != "") ? htmlspecialchars($_POST['destination_to'], ENT_QUOTES, 'UTF-8') : "";
+			$people_count = (isset($_POST['people_count']) && $_POST['people_count'] != "") ? htmlspecialchars($_POST['people_count'], ENT_QUOTES, 'UTF-8') : "";
 
 			/* Error Message */
 			if ($destination_from == "") {
